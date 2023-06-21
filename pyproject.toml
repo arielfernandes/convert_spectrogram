@@ -12,6 +12,7 @@ numpy = "^1.24.3"
 librosa = "^0.10.0.post2"
 matplotlib = "^3.7.1"
 pydash = "^7.0.4"
+pathlib = "^1.0.1"
 
 
 [tool.poetry.group.dev.dependencies]

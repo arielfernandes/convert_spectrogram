@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# Author: Ariel Fernandes <0.arielfernandes.0@gmail.com>
+# Created at <2023-06-21 qua 15:47>
+#!/usr/bin/env python3
+
 import librosa
 import librosa.display
 import matplotlib
@@ -7,12 +11,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pydash
 import os
+import shutil
 import pathlib
 import re
 
 
 # get the directories with the audio files
-def audio_to_imagem(dir_name: str):
+def audio_to_image(dir_name: str):
     """create path audio from source"""
     files: dict = {}
     regex = f'{dir_name}(.?\w+.*)'
@@ -27,7 +32,7 @@ def audio_to_imagem(dir_name: str):
 
             files[DIRNAME] = path_files
 
-    create_spectograma(files)
+    create_spectogram(files)
 
 
 # Generate source list to files audio
@@ -43,25 +48,25 @@ def list_dirnames(dir_name: str) -> list | None:
     if isinstance(path_audios, list):
         return [f"{dir_path}/{dir_name}{i}" for i in path_audios]
 
-def create_spectograma(dict_filename: dict):
+def create_spectogram(dict_filename: dict):
     for x in dict_filename:
         dir_file = dict_filename.get(x)
         if isinstance(dir_file, list):
-            create_image_spectograma(dir_file, x)
+            create_image_spectogram(dir_file, x)
 
 
-def create_image_spectograma(list_filename: list, dir_name: str):
+def create_image_spectogram(list_filename: list, dir_name: str):
     """generate image from audios
         Takes the paths of the .wav convert to image
     """
     regex = f'{dir_name}(.?\w+.*)'
 
     PATHDIR = os.path.dirname(os.path.realpath(__file__))
-    DIRECTORY =  f'/dataset/train/{dir_name}'
-    NEW_PATHDIR = f'{PATHDIR}{DIRECTORY}'
+    DIRECTORY =  f'/dataset/{dir_name}'
+    NEW_PATHDIR = f'{PATHDIR}{DIRECTORY}/'
 
-    if os.path.isdir(NEW_PATHDIR):
-        os.rmdir(NEW_PATHDIR)
+    if os.path.exists(NEW_PATHDIR):
+        shutil.rmtree(NEW_PATHDIR)
 
     os.mkdir(NEW_PATHDIR)
 
@@ -76,10 +81,10 @@ def create_image_spectograma(list_filename: list, dir_name: str):
         filename  = pathlib.Path(f"{NEW_PATHDIR}/{NAME.replace('.wav', '')}.jpg")
         plt.savefig(filename, dpi=400, bbox_inches='tight',pad_inches=0)
         plt.close()
-        fig.clf()
+        #fig.clf()
         plt.close(fig)
         plt.close('all')
         del filename,NAME,clip,sample_rate,fig,S
 
 if __name__ == '__main__':
-   audio_to_imagem('Animal-Sound-Dataset-master/')
+   audio_to_image('Animal-Sound-Dataset-master/')
